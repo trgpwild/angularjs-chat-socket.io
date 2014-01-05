@@ -12,7 +12,7 @@ var WebsocketCtrlLoader = require('./websocketCtrlLoader');
 
 router.use(express.static(path.resolve(__dirname, '../app')));
 
-var websocketCtrlLoader = new WebsocketCtrlLoader(io);
+var websocketCtrlLoader = new WebsocketCtrlLoader(io, "/websocket_controllers/");
 
 server.listen(process.env.PORT || 3000, process.env.IP || "0.0.0.0", function(){
   var addr = server.address();

@@ -3,8 +3,8 @@ var path = require('path');
 
 (function() {
 
-    function WebsocketCtrlLoader(io) {
-        var folderpath = __dirname + "/websocket_controllers/";
+    function WebsocketCtrlLoader(io, folder) {
+        var folderpath = __dirname + folder;
         this.loadControllers(folderpath, io);
     }
     

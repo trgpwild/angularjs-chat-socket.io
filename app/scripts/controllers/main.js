@@ -2,23 +2,27 @@
 
 angular.module('angularjsChatWebsocketApp').controller('MainCtrl', function($scope) {
 
-    $scope.nameTextboxDisabled = false;
-
     var chat = io.connect();
 
     $scope.messages = [];
     $scope.warning = '';
     
-    $scope.msg = {
-        name: '',
-        text: ''
+    $scope.reset = function() {
+        $scope.nameTextboxDisabled = false;
+        $scope.msg = {
+            name: '',
+            text: ''
+        };
     };
+    
+    $scope.reset();
 
     chat.on('connect', function() {
         console.log('client connected...');
     });
 
     chat.on('chat:warning', function(warning) {
+        $scope.reset();
         $scope.warning = warning;
         $scope.$apply();
     });
@@ -29,10 +33,12 @@ angular.module('angularjsChatWebsocketApp').controller('MainCtrl', function($sco
     });
 
     $scope.send = function send() {
-        console.log('Sending message:', $scope.text);
-        chat.emit('chat:message', $scope.msg);
-        $scope.nameTextboxDisabled = true;
-        $scope.msg.text = '';
+        if ($scope.msg.name !== '' && $scope.msg.name.length > 0) {
+            console.log('Sending message:', $scope.text);
+            chat.emit('chat:message', $scope.msg);
+            $scope.nameTextboxDisabled = true;
+            $scope.msg.text = '';
+        }
     };
 
 });

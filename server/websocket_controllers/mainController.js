@@ -19,9 +19,27 @@ module.exports = function mainController(io) {
         });
 
         socket.on('chat:message', function(msg) {
-            broadcast('chat:message', msg);
-            users[socket.id] = msg.name;
-            messages.push(msg);
+            
+            var validMessage = true;
+            
+            for(socket_id in users) {
+                if (users[socket_id] === msg.name && socket.id !== socket_id) {
+                    validMessage = false;
+                }
+            }
+            
+            if (validMessage) {
+                
+                broadcast('chat:message', msg);
+                users[socket.id] = msg.name;
+                messages.push(msg);
+                
+            } else {
+                
+                socket.emit('chat:warning', msg.name + ' already exists...');
+                
+            }
+            
         });
 
         function broadcast(event, data) {
